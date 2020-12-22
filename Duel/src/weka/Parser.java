@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import java.util.Arrays;
 
 public class Parser {
+	
 	public static List<String> attributs = null;
 	public static List<String[]> datas = new ArrayList<String[]>();
 

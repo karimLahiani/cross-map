@@ -1,6 +1,7 @@
 package weka;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 import java.util.Random;
 
 import weka.classifiers.Classifier;
@@ -16,61 +17,69 @@ import weka.gui.treevisualizer.TreeVisualizer;
 
 public class WekaJava {
 
-	public static J48 training(String[] args) throws Exception {
-		String[] filtre = { "victory", "defeat" };
+	public static J48 classification(String[] filtre)  {
 		String fileName = "end";
-		String path = Parser.saveARFF(fileName, filtre);
+		String path;
+		J48 cls =null;
+		try {
+			path = Parser.saveARFF(fileName, filtre);
+			// load data
+			DataSource source = new DataSource(path);
+			Instances data = source.getDataSet();
+			// Instances train = new Instances(data, 0, trainSize);
+			// Instances test = new Instances(data, trainSize, data.numInstances() -
+			// trainSize);
 
-		// load data
-		DataSource source = new DataSource(path);
-		Instances data = source.getDataSet();
+			System.out.println("WELL LOAD OFF DATA FOR\n" + path);
+			if (data.classIndex() == -1)
+				data.setClassIndex(data.numAttributes() - 1);
+
+			// if (train.classIndex() == -1)
+			// train.setClassIndex(train.numAttributes() - 1);
+			// if (test.classIndex() == -1)
+			// test.setClassIndex(test.numAttributes() - 1);
+
+			// remove attributs
+			//
+			// OffDataSize 1
+			// DefDataSize 2
+			// OffDataValue 3
+			// DefDataValue 4
+			// AvgAltitude 5
+			// MinAltitude 6
+			// MaxAltitude 7
+			// CurrentAltitude 8
+			// FovValue 9
+			// LastAction 10
+			// Life 11
+			// ImpactProba 12
+			// res 13
+			// filtre attributs
+			
+			int[] indicesOfColumnsToUse = {7, 8, 9, 11, 12};
+
+			Remove remove = new Remove();
+			remove.setAttributeIndicesArray(indicesOfColumnsToUse);
+			remove.setInvertSelection(true);
+			remove.setInputFormat(data);
+			Instances dataSubset = Filter.useFilter(data, remove);
+			
+			
+			cls = new J48();
+			cls.setUnpruned(true);
+			cls.buildClassifier(dataSubset);
+			
+			//System.out.println(cls.graph());
+			//visualize((J48) cls);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 
 		// int trainSize = (int) (1 * data.numInstances());
-		// Instances train = new Instances(data, 0, trainSize);
-		// Instances test = new Instances(data, trainSize, data.numInstances() -
-		// trainSize);
-
-		System.out.println("WELL LOAD OFF DATA FOR\n" + path);
-		if (data.classIndex() == -1)
-			data.setClassIndex(data.numAttributes() - 1);
-
-		// if (train.classIndex() == -1)
-		// train.setClassIndex(train.numAttributes() - 1);
-		// if (test.classIndex() == -1)
-		// test.setClassIndex(test.numAttributes() - 1);
-
-		// remove attributs
-		//
-		// OffDataSize 1
-		// DefDataSize 2
-		// OffDataValue 3
-		// DefDataValue 4
-		// AvgAltitude 5
-		// MinAltitude 6
-		// MaxAltitude 7
-		// CurrentAltitude 8
-		// FovValue 9
-		// LastAction 10
-		// Life 11
-		// ImpactProba 12
-		// res 13
-		// filtre attributs
 		
-		int[] indicesOfColumnsToUse = {7, 8, 9, 11, 12};
-
-		Remove remove = new Remove();
-		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
-		remove.setInvertSelection(true);
-		remove.setInputFormat(data);
-		Instances dataSubset = Filter.useFilter(data, remove);
-		
-		
-		J48 cls = new J48();
-		cls.setUnpruned(true);
-		cls.buildClassifier(dataSubset);
-		
-		//System.out.println(cls.graph());
-		//visualize((J48) cls);
 		return cls;
 
 	}

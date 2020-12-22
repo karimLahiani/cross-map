@@ -13,6 +13,8 @@ import jade.core.behaviours.TickerBehaviour;
 import sma.AbstractAgent;
 import sma.InterestPoint;
 import sma.agents.FinalAgent;
+import weka.classifiers.trees.J48;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,13 +26,15 @@ public class PrologJ48Behavior extends TickerBehaviour {
 
 	public static FinalAgent agent;
 	public static Class nextBehavior;
+	public static J48  cls;
 
 	public static Situation sit;
 
 
-	public PrologJ48Behavior(Agent a, long period) {
+	public PrologJ48Behavior(Agent a, long period, Object cls) {
 		super(a, period);
 		agent = (FinalAgent)((AbstractAgent)a);
+		this.cls  = (J48)(cls);
 	}
 
 
@@ -38,7 +42,7 @@ public class PrologJ48Behavior extends TickerBehaviour {
 	@Override
 	protected void onTick() {
 		try {
-			String prolog = "consult('./ressources/prolog/duel/requete.pl')";
+			String prolog = "consult('./ressources/prolog/duel/requeteWeka.pl')";
 
 			if (!Query.hasSolution(prolog)) {
 				System.out.println("Cannot open file " + prolog);
@@ -143,7 +147,7 @@ public class PrologJ48Behavior extends TickerBehaviour {
 
 	public static void executeAttack() {
 		//System.out.println("attack");
-		nextBehavior = Attack.class;
+		nextBehavior = AttackJ48.class;
 	}
 
 

@@ -58,11 +58,11 @@ public class WekaJava {
 			
 			int[] indicesOfColumnsToUse = {4,5,6,7, 8, 9, 11, 12};
 
-			Remove remove = new Remove();
-			remove.setAttributeIndicesArray(indicesOfColumnsToUse);
-			remove.setInvertSelection(true);
-			remove.setInputFormat(data);
-			data = Filter.useFilter(data, remove);
+			//Remove remove = new Remove();
+			//remove.setAttributeIndicesArray(indicesOfColumnsToUse);
+			//remove.setInvertSelection(true);
+			//remove.setInputFormat(data);
+			//data = Filter.useFilter(data, remove);
 			
 			
 			cls = new J48();

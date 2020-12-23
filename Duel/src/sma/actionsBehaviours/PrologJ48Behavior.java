@@ -100,13 +100,14 @@ public class PrologJ48Behavior extends TickerBehaviour {
 				AbstractAgent.NEIGHBORHOOD_DISTANCE,AbstractAgent.CLOSE_PRECISION,
 				AbstractAgent.VISION_ANGLE);
 		String[] filtre = { "victory", "defeat" };
-		String path;
+		
 		String str = "";
 
 		try {
-			path = Parser.saveARFF("end", filtre);
 			// load data an existing .arff to not recreate one (we only need the attributs)
-			DataSource sourceTmp = new DataSource(path + "end.arff");
+			String path = System.getProperty("user.dir")+ "/ressources/learningBase/";
+			
+			DataSource sourceTmp = new DataSource(path+ "end.arff");
 			Instances dataTmp = sourceTmp.getDataSet();
 			// delete all instances
 			dataTmp.delete();

@@ -80,7 +80,7 @@ public class Parser {
 
 		loadFiles(path, filtre);
 		
-		System.out.println(datas.size());
+		//System.out.println(datas.size());
 		
 		String[] type = new String[datas.get(0).length];
 		String str = "\n" + data;

@@ -27,9 +27,8 @@ public class Parser {
 			files = Files.walk(Paths.get(path)).filter(Files::isRegularFile).collect(Collectors.toList());
 			// System.out.println(dir.toString());
 			for (Path file : files) {
-				if (file.toString().contains(filtre[0]) || file.toString().contains(filtre[1]))
-					loadFile(file.toString());
-
+				if (file.toString().contains(filtre[0]) || file.toString().contains(filtre[1])) 
+					loadFile(file.toString());					
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -44,16 +43,19 @@ public class Parser {
 
 		String st;
 		int cmpt = 0;
+		
+		List<String> lines = new ArrayList<String>();
 		while ((st = br.readLine()) != null) {
-			if (cmpt == 0) {
-				if (attributs == null)
-					attributs = Arrays.asList(st.split(";"));
-				cmpt += 1;
-				continue;
-			}
-			datas.add(st.split(";"));
+			
+			lines.add(st);
 		}
 		br.close();
+		if (lines.size()>1) {
+			if (attributs == null)
+				attributs = Arrays.asList(lines.get(0).split(";"));
+			datas.add(lines.get(1).split(";"));
+		}else
+			datas.add(lines.get(0).split(";"));
 	}
 
 	public static boolean isNumeric(String strNum) {
@@ -77,7 +79,9 @@ public class Parser {
 		String path = System.getProperty("user.dir") + ressourcesDir;
 
 		loadFiles(path, filtre);
-
+		
+		System.out.println(datas.size());
+		
 		String[] type = new String[datas.get(0).length];
 		String str = "\n" + data;
 
@@ -105,19 +109,22 @@ public class Parser {
 			if (!type[i].equals("numeric")) {
 				type[i] = type[i].substring(0, type[i].length() - 1) + "}";
 			}
-			if (i < type.length - 1)
-				entete += at + attributs.get(i) + " " + type[i] + "\n";
-			else
+			if (i < type.length - 1) {
+				if (attributs.get(i).contains("LastAction"))
+					entete += at + attributs.get(i) + " " +"{hunt,retreat,explore_off,explore_def,follow,shoot,idle}" + "\n";
+				else
+					entete += at + attributs.get(i) + " " + type[i] + "\n";
+			}else
 				entete += at + "res " + type[i] + "\n";
 		}
-
+		
 		FileWriter myWriter = new FileWriter(path + fileName + ".arff");
 		myWriter.write(entete);
 		myWriter.write(str);
 
 		myWriter.close();
 		//System.out.println("done!");
-		return path+fileName+".arff";
+		return path;
 	}
 
 }

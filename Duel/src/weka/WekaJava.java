@@ -24,7 +24,7 @@ public class WekaJava {
 		try {
 			path = Parser.saveARFF(fileName, filtre);
 			// load data
-			DataSource source = new DataSource(path);
+			DataSource source = new DataSource(path+fileName+".arff");
 			Instances data = source.getDataSet();
 			// Instances train = new Instances(data, 0, trainSize);
 			// Instances test = new Instances(data, trainSize, data.numInstances() -
@@ -56,18 +56,18 @@ public class WekaJava {
 			// res 13
 			// filtre attributs
 			
-			int[] indicesOfColumnsToUse = {7, 8, 9, 11, 12};
+			int[] indicesOfColumnsToUse = {4,5,6,7, 8, 9, 11, 12};
 
 			Remove remove = new Remove();
 			remove.setAttributeIndicesArray(indicesOfColumnsToUse);
 			remove.setInvertSelection(true);
 			remove.setInputFormat(data);
-			Instances dataSubset = Filter.useFilter(data, remove);
+			data = Filter.useFilter(data, remove);
 			
 			
 			cls = new J48();
 			cls.setUnpruned(true);
-			cls.buildClassifier(dataSubset);
+			cls.buildClassifier(data);
 			
 			//System.out.println(cls.graph());
 			//visualize((J48) cls);
@@ -84,20 +84,33 @@ public class WekaJava {
 
 	}
 
-	public static void visualize(J48 j48) throws Exception {
-		final javax.swing.JFrame jf = new javax.swing.JFrame("Weka Classifier Tree Visualizer: J48");
-		jf.setSize(500, 400);
-		jf.getContentPane().setLayout(new BorderLayout());
-		TreeVisualizer tv = new TreeVisualizer(null, j48.graph(), new PlaceNode2());
-		jf.getContentPane().add(tv, BorderLayout.CENTER);
-		jf.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				jf.dispose();
-			}
-		});
-
-		jf.setVisible(true);
-		tv.fitToScreen();
-
+	public static void visualize(J48 j48) {
+		
+		try {
+			final javax.swing.JFrame jf = new javax.swing.JFrame("Weka Classifier Tree Visualizer: J48");
+			jf.setSize(500, 400);
+			jf.getContentPane().setLayout(new BorderLayout());
+			TreeVisualizer tv;
+			tv = new TreeVisualizer(null, j48.graph(), new PlaceNode2());
+			jf.getContentPane().add(tv, BorderLayout.CENTER);
+			jf.addWindowListener(new java.awt.event.WindowAdapter() {
+				public void windowClosing(java.awt.event.WindowEvent e) {
+					jf.dispose();
+				}
+			});
+			jf.setVisible(true);
+			tv.fitToScreen();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
+
+	public static void main (String[]args) {
+		String[] filtre = { "victory", "defeat" };
+		J48 cls = WekaJava.classification(filtre);
+		WekaJava.visualize(cls);
+	}
+
+	
 }

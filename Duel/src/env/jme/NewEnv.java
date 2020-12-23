@@ -63,7 +63,7 @@ import sma.AbstractAgent;
 import sma.actionsBehaviours.LegalActions;
 import sma.actionsBehaviours.LegalActions.LegalAction;
 import sma.actionsBehaviours.LegalActions.Orientation;
-import sma.actionsBehaviours.PrologBehavior;
+import sma.actionsBehaviours.PrologJ48Behavior;
 import sma.agents.FinalAgent;
 
 
@@ -390,8 +390,9 @@ public class NewEnv extends SimpleApplication {
 			Spatial player = players.get(agent);
 			player.getControl(PlayerControl.class).teleport(dest);;
 			
+		}else {
+			System.out.println("moveTo Error : the agent "+agent+" doesn't exist.");
 		}
-		System.out.println("moveTo Error : the agent "+agent+" doesn't exist.");
 	}
 	
 	public synchronized void stopMoving(String agent){
@@ -480,10 +481,10 @@ public class NewEnv extends SimpleApplication {
 						System.out.println("Simulation done");
 						
 						if(!enemy.equals("Player1")){
-							PrologBehavior.sit.victory = true;
+							PrologJ48Behavior.sit.victory = true;
 						}
 						
-						saveCSV();
+						//saveCSV();
 						saveDataCSV("end");
 						System.exit(0);
 					}
@@ -503,7 +504,7 @@ public class NewEnv extends SimpleApplication {
 	
 	public static void saveCSV(){
 		
-		String res = PrologBehavior.sit.toCSVFile();
+		String res = PrologJ48Behavior.sit.toCSVFile();
 		int id = new Random().nextInt(10000);
 		System.out.println(res);
 		try{
@@ -519,31 +520,31 @@ public class NewEnv extends SimpleApplication {
 	}
 	
 public static void saveDataCSV(String cas){
-		if (PrologBehavior.sit == null)
+		if (PrologJ48Behavior.sit == null)
 			return;
-		String res = PrologBehavior.sit.toCSVFile();
+		String res = PrologJ48Behavior.sit.toCSVFile();
 		int id = new Random().nextInt(10000);
-		System.out.println(res);
+		//System.out.println(res);
 		try{
 			String path= "";
 			if(cas.equals("end")) {
 				if(res.contains("VICTORY")){
-					path = "/ressources/learningBase/victory/victory_"+id+".csv";
+					path = "/ressources/learningBase2/victory/victory_"+id+".csv";
 				}else {
-					path = "/ressources/learningBase/defeat/defeat_"+id+".csv";
+					path = "/ressources/learningBase2/defeat/defeat_"+id+".csv";
 				}
 			}else if(cas.equals("see")){
-				path = "/ressources/learningBase/see/see_"+id+".csv";
+				path = "/ressources/learningBase2/see/see_"+id+".csv";
 				
 			}else if (cas.equals("hit")) {
-				path = "/ressources/learningBase/hit/hit_"+id+".csv";	
+				path = "/ressources/learningBase2/hit/hit_"+id+".csv";	
 			}
 			
 			PrintWriter writer= new PrintWriter(System.getProperty("user.dir")+path, "UTF-8");
 			
 		    writer.println(res);
 		    writer.close();
-		    System.out.println("Execution result saved in /ressources/learnigBase/");
+		    //System.out.println("Execution result saved in /ressources/learnigBase/");
 		} catch (IOException e) {
 		  System.out.println(e);
 		  System.out.println("Experiment saving failed");

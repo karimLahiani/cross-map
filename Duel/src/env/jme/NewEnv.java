@@ -63,6 +63,7 @@ import sma.AbstractAgent;
 import sma.actionsBehaviours.LegalActions;
 import sma.actionsBehaviours.LegalActions.LegalAction;
 import sma.actionsBehaviours.LegalActions.Orientation;
+import sma.actionsBehaviours.PrologHighestPlaceBehavior;
 import sma.actionsBehaviours.PrologJ48Behavior;
 import sma.agents.FinalAgent;
 
@@ -432,6 +433,8 @@ public class NewEnv extends SimpleApplication {
 	}
 	
 	public synchronized Vector3f adjusteHeight(Vector3f in){
+		if (terrain == null)
+			return in;
 		return new Vector3f(in.x, terrain.getHeightmapHeight(new Vector2f(in.x, in.z))-255f, in.z);
 	}
 
@@ -443,7 +446,6 @@ public class NewEnv extends SimpleApplication {
 		Random r = new Random(System.currentTimeMillis());
 		
 		Vector3f res = new Vector3f(min + r.nextFloat() * MAX_DISTANCE, 0f, min + r.nextFloat() * MAX_DISTANCE);
-		
 		return adjusteHeight(res);
 		
 	}
@@ -459,20 +461,23 @@ public class NewEnv extends SimpleApplication {
 			
 			FinalAgent enemyAgent = agents.get(enemy);
 			
+			
+			Situation sit = PrologJ48Behavior.sit;
+			
+			
 			if (isVisible(agent, enemy, MAX_DISTANCE)) {
 				Random r = new Random();
 				float impact = impactProba(origin, target);
-				saveDataCSV("see");
+				saveDataCSV("see",sit);
 				
 				System.out.println(agent+" shooting : "+impact);
-
 				if ( r.nextFloat() < impact){
 					// Target shot
 					System.out.println("Env - shot successfull !!");
 					
 					enemyAgent.life -= AbstractAgent.SHOT_DAMAGE;
 					enemyAgent.lastHit = System.currentTimeMillis();
-					saveDataCSV("hit");
+					saveDataCSV("hit",sit);
 					
 					if (enemyAgent.life <=0) {
 						enemyAgent.dead = true;
@@ -481,11 +486,11 @@ public class NewEnv extends SimpleApplication {
 						System.out.println("Simulation done");
 						
 						if(!enemy.equals("Player1")){
-							PrologJ48Behavior.sit.victory = true;
+							sit.victory = true;
 						}
 						
 						//saveCSV();
-						saveDataCSV("end");
+						saveDataCSV("end",sit );
 						System.exit(0);
 					}
 
@@ -502,27 +507,12 @@ public class NewEnv extends SimpleApplication {
 		return false;
 	}
 	
-	public static void saveCSV(){
-		
-		String res = PrologJ48Behavior.sit.toCSVFile();
-		int id = new Random().nextInt(10000);
-		System.out.println(res);
-		try{
-		    PrintWriter writer = new PrintWriter(System.getProperty("user.dir")+"/ressources/simus/Mosimu_"+id+".csv", "UTF-8");
-		    writer.println(res);
-		    writer.close();
-		    System.out.println("Execution result saved in /ressources/simus/");
-		} catch (IOException e) {
-		  System.out.println(e);
-		  System.out.println("Experiment saving failed");
-		}
-		
-	}
 	
-public static void saveDataCSV(String cas){
-		if (PrologJ48Behavior.sit == null)
+	
+public static void saveDataCSV(String cas,Situation sit){
+		if (sit == null)
 			return;
-		String res = PrologJ48Behavior.sit.toCSVFile();
+		String res = sit.toCSVFile();
 		int id = new Random().nextInt(10000);
 		//System.out.println(res);
 		try{

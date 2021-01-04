@@ -61,7 +61,7 @@ public class PrologJ48Behavior extends TickerBehaviour {
 					// Get parameters
 					if (b.equals("explore")) {
 						terms.add(sit.timeSinceLastShot);
-						terms.add(((ExploreBehavior.prlNextOffend) ? sit.offSize : sit.defSize));
+						terms.add(((HighestPlaceBehavior.prlNextOffend) ? sit.offSize : sit.defSize));
 						terms.add(InterestPoint.INFLUENCE_ZONE);
 						terms.add(NewEnv.MAX_DISTANCE);
 					} else if (b.equals("hunt")) {
@@ -157,8 +157,8 @@ public class PrologJ48Behavior extends TickerBehaviour {
 			agent.removeBehaviour(agent.currentBehavior);
 		}
 
-		if (nextBehavior == ExploreBehavior.class) {
-			ExploreBehavior ex = new ExploreBehavior(agent, FinalAgent.PERIOD);
+		if (nextBehavior == HighestPlaceBehavior.class) {
+			HighestPlaceBehavior ex = new HighestPlaceBehavior(agent, FinalAgent.PERIOD);
 			agent.addBehaviour(ex);
 			agent.currentBehavior = ex;
 
@@ -187,7 +187,7 @@ public class PrologJ48Behavior extends TickerBehaviour {
 
 	public static void executeExplore() {
 		// System.out.println("explore");
-		nextBehavior = ExploreBehavior.class;
+		nextBehavior = HighestPlaceBehavior.class;
 	}
 
 	public static void executeHunt() {

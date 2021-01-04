@@ -1,6 +1,7 @@
 package weka;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -22,15 +23,18 @@ public class WekaJava {
 		String path;
 		J48 cls =null;
 		try {
-			path = Parser.saveARFF(fileName, filtre);
+			String ressourcesDir = "/ressources/learningBase/";
+			path = System.getProperty("user.dir") + ressourcesDir+ fileName+".arff";
+			if (! (new File(path)).exists())
+				Parser.saveARFF(fileName, filtre);
 			// load data
-			DataSource source = new DataSource(path+fileName+".arff");
+			DataSource source = new DataSource(path);
 			Instances data = source.getDataSet();
 			// Instances train = new Instances(data, 0, trainSize);
 			// Instances test = new Instances(data, trainSize, data.numInstances() -
 			// trainSize);
 
-			System.out.println("WELL LOAD OFF DATA FOR\n" + path);
+			System.out.println("WELL LOAD OFF DATA FOR :" + path);
 			if (data.classIndex() == -1)
 				data.setClassIndex(data.numAttributes() - 1);
 
@@ -105,12 +109,5 @@ public class WekaJava {
 			e1.printStackTrace();
 		}
 	}
-
-	public static void main (String[]args) {
-		String[] filtre = { "victory", "defeat" };
-		J48 cls = WekaJava.classification(filtre);
-		WekaJava.visualize(cls);
-	}
-
 	
 }

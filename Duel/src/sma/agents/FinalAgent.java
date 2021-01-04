@@ -13,6 +13,7 @@ import sma.actionsBehaviours.DumbBehavior;
 import sma.actionsBehaviours.ExploreBehavior;
 import sma.actionsBehaviours.HuntBehavior;
 import sma.actionsBehaviours.PrologBehavior;
+import sma.actionsBehaviours.PrologHighestPlaceBehavior;
 import sma.actionsBehaviours.PrologJ48Behavior;
 import sma.actionsBehaviours.TempSphereCast;
 import weka.WekaJava;
@@ -107,8 +108,11 @@ public class FinalAgent extends AbstractAgent{
 			if(useProlog){
 				
 				//addBehaviour(new PrologBehavior(this,PERIOD));
+				//addBehaviour(new PrologHighestPlaceBehavior(this,PERIOD));
+				
 				String[] filtre = { "victory", "defeat" };
 				J48 cls = WekaJava.classification(filtre);
+				//WekaJava.visualize(cls);
 				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));
 			}else{
 				addBehaviour(new DumbBehavior(this, PERIOD));

@@ -463,7 +463,7 @@ public class NewEnv extends SimpleApplication {
 			
 			
 			Situation sit = PrologJ48Behavior.sit;
-			
+			//Situation sit = PrologHighestPlaceBehavior.sit;
 			
 			if (isVisible(agent, enemy, MAX_DISTANCE)) {
 				Random r = new Random();

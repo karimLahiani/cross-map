@@ -7,6 +7,7 @@ import java.util.Random;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
@@ -17,7 +18,34 @@ import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
 
 public class WekaJava {
+	
+	public static BayesNet ClassificationBayesian(String[] filtre) {
+		String fileName = "end";
+		String path;
+		BayesNet cls =null;
+		try {
+			String ressourcesDir = "/ressources/learningBase/";
+			path = System.getProperty("user.dir") + ressourcesDir+ fileName+".arff";
+			if (! (new File(path)).exists())
+				Parser.saveARFF(fileName, filtre);
+			// load data
+			DataSource source = new DataSource(path);
+			Instances data = source.getDataSet();
+			
+			System.out.println("WELL LOAD OFF DATA FOR :" + path);
+			if (data.classIndex() == -1)
+				data.setClassIndex(data.numAttributes() - 1);
 
+			cls = new BayesNet();
+			cls.buildClassifier(data);
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cls;
+	}
 	public static J48 classification(String[] filtre)  {
 		String fileName = "end";
 		String path;

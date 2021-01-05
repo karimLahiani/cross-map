@@ -17,6 +17,7 @@ import sma.actionsBehaviours.PrologHighestPlaceBehavior;
 import sma.actionsBehaviours.PrologJ48Behavior;
 import sma.actionsBehaviours.TempSphereCast;
 import weka.WekaJava;
+import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.trees.J48;
 
 public class FinalAgent extends AbstractAgent{
@@ -106,14 +107,18 @@ public class FinalAgent extends AbstractAgent{
 			useProlog = ((boolean)args[1]);
 			
 			if(useProlog){
+				String[] filtre = { "victory", "defeat" };
 				
 				//addBehaviour(new PrologBehavior(this,PERIOD));
 				//addBehaviour(new PrologHighestPlaceBehavior(this,PERIOD));
-				
-				String[] filtre = { "victory", "defeat" };
+				/* for J48 algorithm
 				J48 cls = WekaJava.classification(filtre);
 				//WekaJava.visualize(cls);
+				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));//*/
+				//* for BayesNet classifier
+				BayesNet cls = WekaJava.ClassificationBayesian(filtre);
 				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));
+				//*/
 			}else{
 				addBehaviour(new DumbBehavior(this, PERIOD));
 			}

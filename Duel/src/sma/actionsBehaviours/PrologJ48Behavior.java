@@ -17,7 +17,7 @@ import weka.Parser;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-
+import weka.classifiers.bayes.BayesNet;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -32,14 +32,16 @@ public class PrologJ48Behavior extends TickerBehaviour {
 
 	public static FinalAgent agent;
 	public static Class nextBehavior;
-	public static J48 cls;
-
+	//public static J48 cls;
+	public static BayesNet cls;
+	
 	public static Situation sit;
 
 	public PrologJ48Behavior(Agent a, long period, Object cls) {
 		super(a, period);
 		agent = (FinalAgent) ((AbstractAgent) a);
-		this.cls = (J48) (cls);
+		//this.cls = (J48) (cls);
+		this.cls = (BayesNet) (cls);
 	}
 
 	@Override

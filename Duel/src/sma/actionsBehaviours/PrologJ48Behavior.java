@@ -15,6 +15,7 @@ import sma.InterestPoint;
 import sma.agents.FinalAgent;
 import weka.Parser;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomTree;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.bayes.BayesNet;
@@ -33,15 +34,16 @@ public class PrologJ48Behavior extends TickerBehaviour {
 	public static FinalAgent agent;
 	public static Class nextBehavior;
 	//public static J48 cls;
-	public static BayesNet cls;
-	
+	//public static BayesNet cls;
+	public static RandomTree cls;
 	public static Situation sit;
 
 	public PrologJ48Behavior(Agent a, long period, Object cls) {
 		super(a, period);
 		agent = (FinalAgent) ((AbstractAgent) a);
 		//this.cls = (J48) (cls);
-		this.cls = (BayesNet) (cls);
+		//this.cls = (BayesNet) (cls);
+		this.cls = (RandomTree) (cls);
 	}
 
 	@Override

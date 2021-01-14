@@ -19,6 +19,7 @@ import sma.actionsBehaviours.TempSphereCast;
 import weka.WekaJava;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomTree;
 
 public class FinalAgent extends AbstractAgent{
 
@@ -111,14 +112,20 @@ public class FinalAgent extends AbstractAgent{
 				
 				//addBehaviour(new PrologBehavior(this,PERIOD));
 				//addBehaviour(new PrologHighestPlaceBehavior(this,PERIOD));
+				
 				/* for J48 algorithm
 				J48 cls = WekaJava.classification(filtre);
 				//WekaJava.visualize(cls);
-				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));//*/
-				//* for BayesNet classifier
+				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));
+				*/
+				
+				/* for BayesNet classifier
 				BayesNet cls = WekaJava.ClassificationBayesian(filtre);
 				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));
-				//*/
+				*/
+				
+				RandomTree cls = WekaJava.ClassificationRandomTree(filtre);
+				addBehaviour(new PrologJ48Behavior(this, PERIOD, cls));
 			}else{
 				addBehaviour(new DumbBehavior(this, PERIOD));
 			}
